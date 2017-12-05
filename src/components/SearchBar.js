@@ -171,7 +171,7 @@ class SearchBar extends Component {
 
       this.throttledSearch();
 
-    } else if (this.state.searchValue === '') {
+    } else if (this.state.searchValue === '' || !this.state.searchValue) {
 
       this.setState({
         searchResults: [],
@@ -195,7 +195,7 @@ class SearchBar extends Component {
     return (
       <Fragment>
         <SearchBarInput type="text"
-          value={this.state.searchValue}
+          defaultValue={this.state.searchValue}
           onChange={this.handleChange.bind(this)}
           id={searchBarID}
           ref={searchBarID}
