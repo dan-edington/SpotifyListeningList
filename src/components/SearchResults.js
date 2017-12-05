@@ -50,6 +50,7 @@ class SearchResults extends Component {
       top: ${this.state.topPos};
       left: 5%;
       overflow: scroll;
+      overflow-x: hidden;
 
       >li {
         clear: both;
