@@ -38,19 +38,22 @@ class SearchResults extends Component {
     const ResultsList = styled.ul`
       position: absolute;
       z-index: 999;
-      width: 90%;
+      width: calc(90% - 20px);
       height: 50%;
       max-height: 340px;
       border-radius: 15px;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
       padding: 0;
       margin: 0;
       background-color: #fff;
       display: ${this.props.searchResults.length > 0 ? 'block' : 'none'};
       list-style-type: none;
       top: ${this.state.topPos};
-      left: 5%;
+      left: calc(5% + 10px);
       overflow: scroll;
       overflow-x: hidden;
+      box-shadow: 0px 10px 20px #000;
 
       >li {
         clear: both;
