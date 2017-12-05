@@ -5,7 +5,7 @@
     "extends": "airbnb-base",
     "plugins": [
         "import",
-        "react"
+        "react/recommended"
     ],
     "parserOptions": {
       "ecmaVersion": 6,

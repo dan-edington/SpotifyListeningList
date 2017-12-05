@@ -2,8 +2,22 @@ import React, { Fragment, Component } from 'react';
 import throttle from 'lodash.throttle';
 import axios from 'axios';
 import qs from 'qs';
+import styled from 'styled-components';
 import SpotifyCredentials from '../config/SpotifyCredentials';
 import SearchResults from './SearchResults';
+
+const SearchBarInput = styled.input`
+  margin: 0 auto;
+  width: 90%;
+  height: 25px;
+  display: block;
+  border-radius: 15px;
+  border: 1px solid #fff;
+  outline: none;
+  text-align: center;
+`;
+
+const searchBarID = 'SearchBarInput';
 
 class SearchBar extends Component {
 
@@ -11,7 +25,7 @@ class SearchBar extends Component {
 
     super(props);
     // Create a throttled version of this.albumSearch to keep HTTP requests down
-    this.throttledSearch = throttle(this.doAlbumSearch.bind(this), 1000);
+    this.throttledSearch = throttle(this.doAlbumSearch.bind(this), 500);
     this.accessToken = null;
 
     this.state = {
@@ -69,8 +83,8 @@ class SearchBar extends Component {
         .then((response) => {
 
           sessionStorage.setItem('accessToken', response.access_token);
-          sessionStorage.setItem('accessTokenExpiresAt', new Date().getTime() + (parseInt(response.expires_in, 10) * 1000));
-          this.accessToken = response;
+          sessionStorage.setItem('accessTokenExpiresAt', new Date().getTime() + (parseInt(response.expires_in, 10) * 1000)); // Expires_in returns a value in seconds so multiply by 1000 to get ms
+          this.accessToken = sessionStorage.getItem('accessToken');
 
         });
 
@@ -180,13 +194,17 @@ class SearchBar extends Component {
 
     return (
       <Fragment>
-        <input type="text"
+        <SearchBarInput type="text"
           defaultValue={this.state.searchValue}
+          value={this.state.searchValue}
           onChange={this.handleChange.bind(this)}
+          id={searchBarID}
+          ref={searchBarID}
         />
         <SearchResults
           clearSearch={this.clearSearch.bind(this)}
           searchResults={this.state.searchResults}
+          searchBarID={searchBarID}
         />
       </Fragment>
     );
