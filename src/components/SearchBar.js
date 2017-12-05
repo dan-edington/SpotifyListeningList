@@ -195,7 +195,6 @@ class SearchBar extends Component {
     return (
       <Fragment>
         <SearchBarInput type="text"
-          defaultValue={this.state.searchValue}
           value={this.state.searchValue}
           onChange={this.handleChange.bind(this)}
           id={searchBarID}
@@ -205,6 +204,7 @@ class SearchBar extends Component {
           clearSearch={this.clearSearch.bind(this)}
           searchResults={this.state.searchResults}
           searchBarID={searchBarID}
+          saveAlbum={this.props.saveAlbum}
         />
       </Fragment>
     );

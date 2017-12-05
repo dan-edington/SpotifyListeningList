@@ -6,9 +6,10 @@ class SearchResults extends Component {
   constructor(props) {
 
     super(props);
+
     this.state = {
       topPos: 0,
-    }
+    };
 
   }
 
@@ -16,13 +17,15 @@ class SearchResults extends Component {
 
     e.preventDefault();
     const albumID = e.currentTarget.getAttribute('albumid');
-    console.log(this.props.searchResults[albumID]);
+    const albumDetails = this.props.searchResults[albumID];
+    this.props.saveAlbum(albumDetails);
     this.props.clearSearch();
 
   }
 
   componentDidMount() {
 
+    // Calculate position of input and use it to position dropdown
     const searchEl = document.getElementById('SearchBarInput');
     this.setState({
       topPos: window.getComputedStyle(searchEl).getPropertyValue('top')
@@ -47,10 +50,6 @@ class SearchResults extends Component {
       top: ${this.state.topPos};
       left: 5%;
       overflow: scroll;
-      
-      :hover {
-        background-color: #4286f4
-      }
 
       >li {
         clear: both;
@@ -61,6 +60,10 @@ class SearchResults extends Component {
 
       >li:last-child {
         border-bottom: 0;
+      }
+
+      >li:hover {
+        background-color: #4286f4
       }
 
       >li img {
