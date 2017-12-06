@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import AppServerCredentials from '../config/AppServerCredentials';
 import SearchResults from './SearchResults';
 
+const searchBarID = 'SearchBarInput';
+
 const SearchBarInput = styled.input`
   margin: 0 auto;
   width: 90%;
@@ -17,21 +19,37 @@ const SearchBarInput = styled.input`
   font-size: 1em;
 `;
 
-const searchBarID = 'SearchBarInput';
-
 class SearchBar extends Component {
 
   constructor(props) {
 
     super(props);
     // Create a throttled version of this.albumSearch to keep HTTP requests down
-    this.throttledSearch = throttle(this.doAlbumSearch.bind(this), 500);
+    this.throttledSearch = throttle(this.doAlbumSearch.bind(this), 250);
     this.accessToken = null;
 
     this.state = {
       searchValue: '',
       searchResults: [],
+      dropDownVisible: false,
     };
+
+  }
+
+  handleBlur() {
+
+    // Added a short timeout so dropdown can still receive click event if blur happens that way
+    setTimeout(() => {
+
+      this.setState({ dropDownVisible: false });
+
+    }, 100);
+
+  }
+
+  handleFocus() {
+
+    this.setState({ dropDownVisible: true });
 
   }
 
@@ -148,7 +166,7 @@ class SearchBar extends Component {
    */
   handleChange(e) {
 
-    const searchValue = e.target.value.trim();
+    const searchValue = e.target.value;
     this.setState({ searchValue });
 
     const now = new Date().getTime();
@@ -189,8 +207,10 @@ class SearchBar extends Component {
     return (
       <Fragment>
         <SearchBarInput type="text"
-          defaultValue={this.state.searchValue}
+          value={this.state.searchValue}
           onChange={this.handleChange.bind(this)}
+          onFocus={this.handleFocus.bind(this)}
+          onBlur={this.handleBlur.bind(this)}
           id={searchBarID}
           ref={searchBarID}
         />
@@ -199,6 +219,7 @@ class SearchBar extends Component {
           searchResults={this.state.searchResults}
           searchBarID={searchBarID}
           saveAlbum={this.props.saveAlbum}
+          visibility={this.state.dropDownVisible}
         />
       </Fragment>
     );

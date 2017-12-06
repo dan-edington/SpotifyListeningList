@@ -28,7 +28,7 @@ class SearchResults extends Component {
     // Calculate position of input and use it to position dropdown
     const searchEl = document.getElementById('SearchBarInput');
     this.setState({
-      topPos: window.getComputedStyle(searchEl).getPropertyValue('top')
+      topPos: window.getComputedStyle(searchEl).getPropertyValue('top'),
     });
 
   }
@@ -39,7 +39,7 @@ class SearchResults extends Component {
       position: absolute;
       z-index: 999;
       width: calc(90% - 20px);
-      height: 50%;
+      height: auto;
       max-height: 340px;
       border-radius: 15px;
       border-top-left-radius: 0px;
@@ -47,12 +47,12 @@ class SearchResults extends Component {
       padding: 0;
       margin: 0;
       background-color: #fff;
-      display: ${this.props.searchResults.length > 0 ? 'block' : 'none'};
+      display: ${this.props.searchResults.length > 0 && this.props.visibility ? 'block' : 'none'};
       list-style-type: none;
       top: ${this.state.topPos};
       left: calc(5% + 10px);
       overflow: scroll;
-      overflow-x: hidden;
+      overflow-x: auto;
       box-shadow: 0px 10px 20px #000;
 
       >li {
