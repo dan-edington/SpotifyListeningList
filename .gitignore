@@ -11,6 +11,7 @@
 
 # config
 /src/config/SpotifyCredentials.js
+/src/config/AppServerCredentials.js
 
 # misc
 .DS_Store

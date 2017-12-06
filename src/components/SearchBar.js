@@ -1,9 +1,8 @@
 import React, { Fragment, Component } from 'react';
 import throttle from 'lodash.throttle';
 import axios from 'axios';
-import qs from 'qs';
 import styled from 'styled-components';
-import SpotifyCredentials from '../config/SpotifyCredentials';
+import AppServerCredentials from '../config/AppServerCredentials';
 import SearchResults from './SearchResults';
 
 const SearchBarInput = styled.input`
@@ -43,17 +42,11 @@ class SearchBar extends Component {
 
     return new Promise((resolve, reject) => {
 
-      const authString = btoa(unescape(encodeURIComponent(`${SpotifyCredentials.clientID}:${SpotifyCredentials.clientSecret}`)));
-
       axios({
         method: 'post',
-        url: 'https://accounts.spotify.com/api/token',
-        data: qs.stringify({
-          grant_type: 'client_credentials',
-        }),
-        headers: {
-          Authorization: `Basic ${authString}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
+        url: `${AppServerCredentials.serverURL}/spotify/getAuthToken`,
+        data: {
+          appName: 'SPOTIFY_LISTENINGLIST',
         },
       }).then((response) => {
 
@@ -116,13 +109,13 @@ class SearchBar extends Component {
       axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/search',
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
         params: {
           q: this.state.searchValue,
           type: 'album',
           limit: 5,
+        },
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
         },
       }).then((response) => {
 
