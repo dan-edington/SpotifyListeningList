@@ -15,6 +15,7 @@ const SearchBarInput = styled.input`
   border: 1px solid #fff;
   outline: none;
   text-align: center;
+  font-size: 1em;
 `;
 
 const searchBarID = 'SearchBarInput';

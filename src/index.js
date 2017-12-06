@@ -17,7 +17,7 @@ html, body {
   border: 0;
   padding: 0;
   margin: 0;
-  font-size: 1em;
+  font-size: 16px;
 }
 `]);
 
