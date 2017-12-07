@@ -53,6 +53,7 @@ class SearchResults extends Component {
       top: ${this.state.topPos};
       left: calc(5% + 10px);
       box-shadow: 0px 10px 20px #000;
+      overflow: hidden;
 
       >li {
         clear: both;
