@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const SavedAlbumItem = styled.li`
@@ -40,36 +40,32 @@ const DeleteButton = styled.p`
   font-size: 1.5em;
 `;
 
-class SaveAlbum extends Component {
+const SaveAlbum = (props) => {
 
-  openAlbum() {
+  const openAlbum = () => {
 
-    window.open(this.props.albumData.url);
+    window.open(props.albumData.url);
 
-  }
+  };
 
-  deleteAlbum(e) {
+  const deleteAlbum = (e) => {
 
     e.stopPropagation();
-    this.props.deleteAlbum(this.props.albumID);
+    props.deleteAlbum(props.albumID);
 
-  }
+  };
 
-  render() {
+  return (
+    <SavedAlbumItem onClick={openAlbum}>
+      <DeleteButton onClick={deleteAlbum}>&#x2716;</DeleteButton>
+      <img src={props.albumData.artwork} alt={props.albumData.name} />
+      <AlbumDescriptionContainer>
+        <AlbumName>{props.albumData.name} ({props.albumData.type})</AlbumName>
+        <ArtistName>{props.albumData.artist}</ArtistName>
+      </AlbumDescriptionContainer>
+    </SavedAlbumItem>
+  );
 
-    return (
-      <SavedAlbumItem onClick={this.openAlbum.bind(this)}>
-        <DeleteButton onClick={this.deleteAlbum.bind(this)}>&#x2716;</DeleteButton>
-        <img src={this.props.albumData.artwork} alt={this.props.albumData.name} />
-        <AlbumDescriptionContainer>
-          <AlbumName>{this.props.albumData.name}</AlbumName>
-          <ArtistName>{this.props.albumData.artist}</ArtistName>
-        </AlbumDescriptionContainer>
-      </SavedAlbumItem>
-    );
-
-  }
-
-}
+};
 
 export default SaveAlbum;

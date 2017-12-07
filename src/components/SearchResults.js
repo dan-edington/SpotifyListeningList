@@ -11,6 +11,8 @@ class SearchResults extends Component {
       topPos: 0,
     };
 
+    this.handleResultClick = this.handleResultClick.bind(this);
+
   }
 
   handleResultClick(e) {
@@ -40,7 +42,6 @@ class SearchResults extends Component {
       z-index: 999;
       width: calc(90% - 20px);
       height: auto;
-      max-height: 340px;
       border-radius: 15px;
       border-top-left-radius: 0px;
       border-top-right-radius: 0px;
@@ -51,8 +52,6 @@ class SearchResults extends Component {
       list-style-type: none;
       top: ${this.state.topPos};
       left: calc(5% + 10px);
-      overflow: scroll;
-      overflow-x: auto;
       box-shadow: 0px 10px 20px #000;
 
       >li {
@@ -94,10 +93,10 @@ class SearchResults extends Component {
     `;
 
     const results = this.props.searchResults.map((album, i) => (
-      <li key={i} albumid={i} onClick={this.handleResultClick.bind(this)}>
+      <li key={i} albumid={i} onClick={this.handleResultClick}>
         <img src={album.artwork} alt={album.name} />
         <AlbumDescriptionContainer>
-          <AlbumName>{album.name}</AlbumName>
+          <AlbumName>{album.name} ({album.type})</AlbumName>
           <ArtistName>{album.artist}</ArtistName>
         </AlbumDescriptionContainer>
       </li>

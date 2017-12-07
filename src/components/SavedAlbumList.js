@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import SavedAlbum from './SavedAlbum';
 
@@ -9,33 +9,30 @@ const SavedAlbums = styled.ul`
   padding: 0;
 `;
 
-class SaveAlbumList extends Component {
+const SavedAlbumList = (props) => {
 
-  render() {
+  const albumCount = Object.keys(props.savedAlbums).length;
+  const albums = [];
 
-    const albumCount = Object.keys(this.props.savedAlbums).length;
-    const albums = [];
-    for (let i = 0; i < albumCount; i++) {
+  for (let i = 0; i < albumCount; i++) {
 
-      albums.push(
-        <SavedAlbum
-          key={i}
-          albumID={i}
-          albumData={this.props.savedAlbums[i]}
-          deleteAlbum={this.props.deleteAlbum}
-        />
-      );
-
-    }
-
-    return (
-      <SavedAlbums>
-        {albums}
-      </SavedAlbums>
+    albums.push(
+      <SavedAlbum
+        key={i}
+        albumID={i}
+        albumData={props.savedAlbums[i]}
+        deleteAlbum={props.deleteAlbum}
+      />
     );
 
   }
 
-}
+  return (
+    <SavedAlbums>
+      {albums}
+    </SavedAlbums>
+  );
 
-export default SaveAlbumList;
+};
+
+export default SavedAlbumList;

@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import throttle from 'lodash.throttle';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -6,6 +6,10 @@ import AppServerCredentials from '../config/AppServerCredentials';
 import SearchResults from './SearchResults';
 
 const searchBarID = 'SearchBarInput';
+
+const SearchContainer = styled.div`
+  position: relative;
+`;
 
 const SearchBarInput = styled.input`
   margin: 0 auto;
@@ -24,6 +28,7 @@ class SearchBar extends Component {
   constructor(props) {
 
     super(props);
+
     // Create a throttled version of this.albumSearch to keep HTTP requests down
     this.throttledSearch = throttle(this.doAlbumSearch.bind(this), 250);
     this.accessToken = null;
@@ -33,6 +38,11 @@ class SearchBar extends Component {
       searchResults: [],
       dropDownVisible: false,
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
 
   }
 
@@ -108,7 +118,7 @@ class SearchBar extends Component {
 
   }
 
-  componentWillMount() {
+  componentDidMount() {
 
     this.setAccessToken();
 
@@ -140,6 +150,7 @@ class SearchBar extends Component {
         response.data.albums.items.forEach((album) => {
 
           searchResults.push({
+            type: album.album_type,
             name: album.name,
             artist: album.artists[0].name,
             artwork: album.images[2].url,
@@ -205,23 +216,23 @@ class SearchBar extends Component {
   render() {
 
     return (
-      <Fragment>
+      <SearchContainer>
         <SearchBarInput type="text"
           value={this.state.searchValue}
-          onChange={this.handleChange.bind(this)}
-          onFocus={this.handleFocus.bind(this)}
-          onBlur={this.handleBlur.bind(this)}
+          onChange={this.handleChange}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
           id={searchBarID}
           ref={searchBarID}
         />
         <SearchResults
-          clearSearch={this.clearSearch.bind(this)}
+          clearSearch={this.clearSearch}
           searchResults={this.state.searchResults}
           searchBarID={searchBarID}
           saveAlbum={this.props.saveAlbum}
           visibility={this.state.dropDownVisible}
         />
-      </Fragment>
+      </SearchContainer>
     );
 
   }

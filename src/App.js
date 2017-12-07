@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import isequal from 'lodash.isequal';
 import styled from 'styled-components';
 import SearchBar from './components/SearchBar';
@@ -10,6 +10,11 @@ const Heading = styled.h1`
   margin: 0;
   font-size: 1.5em;
   text-align: center;
+`;
+
+const AppContainer = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
 `;
 
 class App extends Component {
@@ -92,7 +97,7 @@ class App extends Component {
   render() {
 
     return (
-      <Fragment>
+      <AppContainer>
         <Heading>Spotify To-Listen-To</Heading>
         <SearchBar
           saveAlbum={this.saveAlbum.bind(this)}
@@ -101,7 +106,7 @@ class App extends Component {
           savedAlbums={this.state.savedAlbums}
           deleteAlbum={this.deleteAlbum.bind(this)}
         />
-      </Fragment>
+      </AppContainer>
     );
 
   }
