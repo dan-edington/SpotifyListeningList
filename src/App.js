@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import isequal from 'lodash.isequal';
 import styled from 'styled-components';
+import CookieBanner from 'react-cookie-banner';
 import SearchBar from './components/SearchBar';
 import SavedAlbumList from './components/SavedAlbumList';
 
@@ -28,6 +29,9 @@ class App extends Component {
     this.state = {
       savedAlbums,
     };
+
+    this.saveAlbum = this.saveAlbum.bind(this);
+    this.deleteAlbum = this.deleteAlbum.bind(this);
 
   }
 
@@ -96,17 +100,24 @@ class App extends Component {
 
   render() {
 
+    const msg = 'This site uses cookies. By continuing to use the site, you agree to the use of cookies.';
+
     return (
-      <AppContainer>
-        <Heading>Spotify To-Listen-To</Heading>
-        <SearchBar
-          saveAlbum={this.saveAlbum.bind(this)}
+      <Fragment>
+        <CookieBanner
+          message={msg}
         />
-        <SavedAlbumList
-          savedAlbums={this.state.savedAlbums}
-          deleteAlbum={this.deleteAlbum.bind(this)}
-        />
-      </AppContainer>
+        <AppContainer>
+          <Heading>Spotify To-Listen-To</Heading>
+          <SearchBar
+            saveAlbum={this.saveAlbum}
+          />
+          <SavedAlbumList
+            savedAlbums={this.state.savedAlbums}
+            deleteAlbum={this.deleteAlbum}
+          />
+        </AppContainer>
+      </Fragment>
     );
 
   }
