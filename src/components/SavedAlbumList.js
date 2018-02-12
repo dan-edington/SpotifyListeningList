@@ -11,27 +11,36 @@ const SavedAlbums = styled.ul`
 
 const SavedAlbumList = (props) => {
 
-  const albumCount = Object.keys(props.savedAlbums).length;
-  const albums = [];
+  const albumCount = props.savedAlbums.albums ? Object.keys(props.savedAlbums.albums).length : 0;
 
-  for (let i = 0; i < albumCount; i++) {
+  if(albumCount > 0) {
 
-    albums.push(
-      <SavedAlbum
-        key={i}
-        albumID={i}
-        albumData={props.savedAlbums[i]}
-        deleteAlbum={props.deleteAlbum}
-      />
+    const albums = [];
+
+    for (let i = 0; i < albumCount; i++) {
+  
+      albums.push(
+        <SavedAlbum
+          key={i}
+          albumID={props.savedAlbums.albums[i]._id}
+          albumData={props.savedAlbums.albums[i]}
+          deleteAlbum={props.deleteAlbum}
+        />
+      );
+  
+    }
+
+    return (
+      <SavedAlbums>
+        {albums}
+      </SavedAlbums>
     );
 
-  }
+  } else {
 
-  return (
-    <SavedAlbums>
-      {albums}
-    </SavedAlbums>
-  );
+    return null;
+
+  }
 
 };
 

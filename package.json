@@ -3,21 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.17.1",
-    "lodash.isequal": "^4.5.0",
+    "body-parser": "^1.18.2",
+    "cookie-session": "^2.0.0-beta.3",
+    "express": "^4.16.2",
     "lodash.throttle": "^4.1.1",
+    "mongoose": "^5.0.3",
+    "node-fetch": "^2.0.0",
+    "passport": "^0.4.0",
+    "passport-spotify": "^1.0.0",
     "qs": "^6.5.1",
+    "query-string": "^5.1.0",
     "react": "^16.2.0",
     "react-cookie-banner": "^1.0.1",
     "react-dom": "^16.2.0",
     "react-scripts": "1.0.17",
+    "spotify-sdk": "^1.0.0-beta2",
     "styled-components": "^2.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "set NODE_ENV=development&&nodemon src/server/index.js"
   },
   "devDependencies": {
     "eslint": "^4.12.1",

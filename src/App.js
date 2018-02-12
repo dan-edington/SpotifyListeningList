@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import isequal from 'lodash.isequal';
 import styled from 'styled-components';
 import CookieBanner from 'react-cookie-banner';
 import SearchBar from './components/SearchBar';
 import SavedAlbumList from './components/SavedAlbumList';
+import AuthButton from './components/AuthButton';
+import * as albumService from './services/album';
+import * as authService from './services/auth';
 
 const Heading = styled.h1`
   color: #fff;
@@ -20,14 +22,15 @@ const AppContainer = styled.div`
 
 class App extends Component {
 
-  constructor(props) {
+  constructor() {
 
-    super(props);
+    super();
 
-    const savedAlbums = this.getSavedAlbums();
+    const savedAlbums = [];
 
     this.state = {
       savedAlbums,
+      loggedIn: false,
     };
 
     this.saveAlbum = this.saveAlbum.bind(this);
@@ -35,66 +38,63 @@ class App extends Component {
 
   }
 
-  getSavedAlbums() {
+  async componentDidMount() {
 
-    return JSON.parse(localStorage.getItem('savedAlbums')) || {};
+    const loggedIn = await authService.isUserLoggedIn();
+    this.setState({ loggedIn });
+
+    if(this.state.loggedIn) {
+      this.getSavedAlbums();
+    }
 
   }
 
-  saveAlbum(albumData) {
+  async getSavedAlbums() {
 
-    const savedAlbums = { ...this.state.savedAlbums };
-    const albumCount = Object.keys(savedAlbums).length;
-    let isDuplicate = false;
-
-    for (let i = 0; i < albumCount; i++) {
-
-      if (isequal(this.state.savedAlbums[i], albumData)) {
-
-        isDuplicate = true;
-        break;
-
-      }
-
-    }
-
-    if (!isDuplicate) {
-
-      savedAlbums[albumCount] = albumData;
-
-    }
-
-    localStorage.setItem('savedAlbums', JSON.stringify(savedAlbums));
-
-    this.setState({
-      savedAlbums: this.getSavedAlbums(),
-    });
+    const savedAlbums = await albumService.getAlbums();
+    this.setState({ savedAlbums });
 
   }
 
-  deleteAlbum(albumID) {
+  saveAlbum(albumDetails) {
 
-    const savedAlbums = { ...this.state.savedAlbums };
-    const newAlbums = {};
-    const albumCount = Object.keys(savedAlbums).length;
-    let counter = 0;
+    albumService.saveAlbum(albumDetails)
+      .then(response => {
+        if(response.success) {
+          this.getSavedAlbums();
+        }
+      });
 
-    for (let i = 0; i < albumCount; i++) {
+  }
 
-      if (i !== albumID) {
+  deleteAlbum(id) {
 
-        newAlbums[counter] = savedAlbums[i];
-        counter += 1;
+    albumService.deleteAlbum(id)
+      .then(response => {
+        if(response.success) {
+          this.getSavedAlbums();
+        }
+      });
 
-      }
+  }
+
+  renderAppIfLoggedIn() {
+
+    if(this.state.loggedIn) {
+
+      return(
+        <Fragment>
+          <SearchBar
+            saveAlbum={ this.saveAlbum }
+          />
+          <SavedAlbumList
+            savedAlbums={ this.state.savedAlbums }
+            deleteAlbum={ this.deleteAlbum }
+          />
+        </Fragment>
+      );
 
     }
-
-    this.setState({
-      savedAlbums: newAlbums,
-    });
-
-    localStorage.setItem('savedAlbums', JSON.stringify(newAlbums));
 
   }
 
@@ -109,13 +109,10 @@ class App extends Component {
         />
         <AppContainer>
           <Heading>Spotify To-Listen-To</Heading>
-          <SearchBar
-            saveAlbum={this.saveAlbum}
+          <AuthButton
+            loggedIn={this.state.loggedIn}
           />
-          <SavedAlbumList
-            savedAlbums={this.state.savedAlbums}
-            deleteAlbum={this.deleteAlbum}
-          />
+          { this.renderAppIfLoggedIn() }
         </AppContainer>
       </Fragment>
     );

@@ -10,8 +10,8 @@
 /build
 
 # config
-/src/config/SpotifyCredentials.js
-/src/config/AppServerCredentials.js
+/src/config/index.js
+/src/server/config/index.js
 
 # misc
 .DS_Store

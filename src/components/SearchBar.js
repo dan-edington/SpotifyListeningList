@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import throttle from 'lodash.throttle';
-import axios from 'axios';
+import queryString from 'query-string';
 import styled from 'styled-components';
-import AppServerCredentials from '../config/AppServerCredentials';
+import config from '../config';
 import SearchResults from './SearchResults';
 
 const searchBarID = 'SearchBarInput';
@@ -25,9 +25,9 @@ const SearchBarInput = styled.input`
 
 class SearchBar extends Component {
 
-  constructor(props) {
+  constructor() {
 
-    super(props);
+    super();
 
     // Create a throttled version of this.albumSearch to keep HTTP requests down
     this.throttledSearch = throttle(this.doAlbumSearch.bind(this), 250);
@@ -63,105 +63,35 @@ class SearchBar extends Component {
 
   }
 
-  /**
-   * Request Access Token from Spotify API and return it via a promise
-   */
-  requestAccessToken() {
-
-    return new Promise((resolve, reject) => {
-
-      axios({
-        method: 'post',
-        url: `${AppServerCredentials.serverURL}/spotify/getAuthToken`,
-        data: {
-          appName: 'SPOTIFY_LISTENINGLIST',
-        },
-      }).then((response) => {
-
-        resolve(response.data);
-
-      });
-
-    });
-
-  }
-
-  /**
-   * Tests whether an access token is required.
-   * Requests one if need be then sets the object's accessToken property
-   * @param  { bool } force=false - Forces the request of a new Access Token
-   */
-  setAccessToken(force = false) {
-
-    const now = new Date().getTime();
-    const accessTokenExpiresAt = parseInt(sessionStorage.getItem('accessTokenExpiresAt'), 10);
-    const accessToken = sessionStorage.getItem('accessToken');
-
-    if (!accessToken || !accessTokenExpiresAt || now >= accessTokenExpiresAt || force) {
-
-      console.log('Requesting new auth token from spotify...');
-
-      this.requestAccessToken()
-        .then((response) => {
-
-          sessionStorage.setItem('accessToken', response.access_token);
-          sessionStorage.setItem('accessTokenExpiresAt', new Date().getTime() + (parseInt(response.expires_in, 10) * 1000)); // Expires_in returns a value in seconds so multiply by 1000 to get ms
-          this.accessToken = sessionStorage.getItem('accessToken');
-
-        });
-
-    } else {
-
-      this.accessToken = accessToken;
-
-    }
-
-  }
-
-  componentDidMount() {
-
-    this.setAccessToken();
-
-  }
-
-  /**
-   *  Perform search, parse data and update state
-   *  Only perform search if the search string is not empty
-   */
   doAlbumSearch() {
 
     const searchResults = [];
 
     if (this.state.searchValue && this.state.searchValue !== '') {
 
-      axios({
-        method: 'get',
-        url: 'https://api.spotify.com/v1/search',
-        params: {
-          q: this.state.searchValue,
-          type: 'album',
-          limit: 5,
-        },
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
-      }).then((response) => {
+      const URLParams = queryString.stringify({
+        q: this.state.searchValue,
+        type: 'album',
+        limit: 5,
+      });
 
-        response.data.albums.items.forEach((album) => {
+      fetch(`${config.serverBaseURL}/search?${URLParams}`, { credentials: 'include' })
+        .then(response => response.json())
+        .then(response => {
 
-          searchResults.push({
-            type: album.album_type,
-            name: album.name,
-            artist: album.artists[0].name,
-            artwork: album.images[2].url,
-            url: album.external_urls.spotify,
+          const searchResults = response.albums.items.map(album => {
+            return {
+              type: album.album_type,
+              name: album.name,
+              artist: album.artists[0].name,
+              artwork: album.images[2].url,
+              url: album.external_urls.spotify,
+            }
           });
 
+          this.setState({ searchResults });
+
         });
-
-        this.setState({ searchResults });
-
-      });
 
     } else {
 
@@ -171,24 +101,10 @@ class SearchBar extends Component {
 
   }
 
-  /**
-   * Checks token has expired and either requests a new token or runs the search (throttled)
-   * @param  { object } e - Event object
-   */
   handleChange(e) {
 
     const searchValue = e.target.value;
     this.setState({ searchValue });
-
-    const now = new Date().getTime();
-    const accessTokenExpiresAt = parseInt(sessionStorage.getItem('accessTokenExpiresAt'), 10);
-
-    if (now >= accessTokenExpiresAt) {
-
-      this.setAccessToken();
-      return;
-
-    }
 
     if (this.state.searchValue && this.state.searchValue !== '') {
 

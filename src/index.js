@@ -19,6 +19,7 @@ html, body {
   margin: 0;
   font-size: 16px;
 }
+
 `]);
 
 const theme = {};

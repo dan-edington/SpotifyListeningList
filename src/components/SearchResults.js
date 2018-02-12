@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 class SearchResults extends Component {
 
-  constructor(props) {
+  constructor() {
 
-    super(props);
+    super();
 
     this.state = {
       topPos: 0,
