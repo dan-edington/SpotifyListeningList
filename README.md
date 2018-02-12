@@ -1,7 +1,6 @@
 # Spotify To-Listen-To
 
-Simple React app which consumes the Spotify API to search for albums and add them to a todo list.
-Currently, todos are saved in browser localstorage. Will probably update to database storage in the future.
+React app which consumes the Spotify API to search for albums and add them to a todo list. Users and saved albums are persisted to a MongoDB instance at mlab.com.
 
 Built using create-react-app so the usual commands apply:
 
@@ -17,4 +16,6 @@ Start a production build:
 npm build
 ```
 
-Prior to running, make sure src/config/SpotifyCredentials.js exists and contains the correct details.
+The server is located in src/server. It requires the NODE_ENV variable setting to development prior to running.
+
+Prior to running, ensure the app config (src/config/index.js) and server config (src/server/config/index.js) are set up properly.

@@ -21,6 +21,10 @@ const DBCredentials = {
 
 const serverConfig = {
   port: 3001,
+  serverRoot: {
+    production: '',
+    development: '',
+  }
 }
 
 const cookieKey = '';
@@ -28,6 +32,7 @@ const cookieKey = '';
 const config = {
   callbackURL: AppCredentials.callbackURL[process.env.NODE_ENV],
   appClientURL: AppCredentials.appClientURL[process.env.NODE_ENV],
+  serverRoot: serverConfig.serverRoot[process.env.NODE_ENV],
   keys: AppCredentials.keys,
   port: serverConfig.port,
   DBCredentials,
