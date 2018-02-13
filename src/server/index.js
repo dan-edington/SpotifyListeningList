@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const config = require('./config');
+const spotifyService = require('./services/spotify');
 require('./models/User');
 require('./services/passport');
 
@@ -40,3 +41,5 @@ App.listen(config.port, () => {
   console.log('Listening...');
 
 });
+
+spotifyService.startSpotifyTokenService();

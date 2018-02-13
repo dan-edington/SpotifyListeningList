@@ -23,8 +23,6 @@ const SpotifyAppStrategy = new SpotifyStrategy(
 
     }
 
-    global.spotifyAccessToken = accessToken;
-
     done(null, theUser);
 
   },

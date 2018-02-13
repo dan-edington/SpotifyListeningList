@@ -11,7 +11,8 @@ const Heading = styled.h1`
   color: #fff;
   padding: 20px 10px;
   margin: 0;
-  font-size: 1.5em;
+  font-weight: normal;
+  font-size: 2em;
   text-align: center;
 `;
 
@@ -100,15 +101,13 @@ class App extends Component {
 
   render() {
 
-    const msg = 'This site uses cookies. By continuing to use the site, you agree to the use of cookies.';
+    const msg = 'This site uses cookies.';
 
     return (
       <Fragment>
-        <CookieBanner
-          message={msg}
-        />
         <AppContainer>
-          <Heading>Spotify To-Listen-To</Heading>
+        <CookieBanner message={msg} />          
+          <Heading>Spotify Listening List</Heading>
           <AuthButton
             loggedIn={this.state.loggedIn}
           />

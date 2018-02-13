@@ -12,7 +12,7 @@ injectGlobal([`
 html, body {
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, #7d7e7d 0%,#0e0e0e 100%);
+  background: #565656;
   font-family: sans-serif;
   border: 0;
   padding: 0;
