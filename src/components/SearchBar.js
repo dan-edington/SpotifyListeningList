@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import queryString from 'query-string';
 import styled from 'styled-components';
 import config from '../config';
@@ -12,6 +12,9 @@ const SearchContainer = styled.div`
 `;
 
 const SearchBarInput = styled.input`
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   margin: 0 auto;
   width: 90%;
   height: 25px;
@@ -30,7 +33,7 @@ class SearchBar extends Component {
     super();
 
     // Create a throttled version of this.albumSearch to keep HTTP requests down
-    this.throttledSearch = throttle(this.doAlbumSearch.bind(this), 250);
+    this.debouncedSearch = debounce(this.doAlbumSearch.bind(this), 200, { leading: true, trailing: true } );
     this.accessToken = null;
 
     this.state = {
@@ -105,12 +108,12 @@ class SearchBar extends Component {
 
     const searchValue = e.target.value;
     this.setState({ searchValue });
+    
+    if (searchValue && searchValue !== '') {
 
-    if (this.state.searchValue && this.state.searchValue !== '') {
+      this.debouncedSearch();
 
-      this.throttledSearch();
-
-    } else if (this.state.searchValue === '' || !this.state.searchValue) {
+    } else if (searchValue === '' || !searchValue) {
 
       this.setState({
         searchResults: [],

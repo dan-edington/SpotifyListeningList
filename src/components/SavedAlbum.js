@@ -57,7 +57,7 @@ const SaveAlbum = (props) => {
 
   return (
     <SavedAlbumItem onClick={openAlbum}>
-      <DeleteButton onClick={deleteAlbum}>&#x2716;</DeleteButton>
+      <DeleteButton onClick={deleteAlbum}>&#x2716;&#xFE0E;</DeleteButton>
       <img src={props.albumData.artworkURL} alt={props.albumData.name} />
       <AlbumDescriptionContainer>
         <AlbumName>{props.albumData.name} ({props.albumData.type})</AlbumName>
