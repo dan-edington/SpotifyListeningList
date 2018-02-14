@@ -1,5 +1,4 @@
 const passport = require('passport');
-const queryString = require('query-string');
 const fetch = require('node-fetch');
 const config = require('../config');
 

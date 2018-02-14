@@ -39,14 +39,20 @@ class App extends Component {
 
   }
 
-  async componentDidMount() {
+  componentDidMount() {
 
-    const loggedIn = await authService.isUserLoggedIn();
-    this.setState({ loggedIn });
+    authService.isUserLoggedIn()
+      .then(response => {
 
-    if(this.state.loggedIn) {
-      this.getSavedAlbums();
-    }
+        this.setState({ loggedIn: response }, () => {
+
+          if(this.state.loggedIn) {
+            this.getSavedAlbums();
+          }
+
+        });
+
+      });
 
   }
 
@@ -108,9 +114,7 @@ class App extends Component {
         <AppContainer>
         <CookieBanner message={msg} />          
           <Heading>Spotify Listening List</Heading>
-          <AuthButton
-            loggedIn={this.state.loggedIn}
-          />
+          <AuthButton loggedIn={this.state.loggedIn} />
           { this.renderAppIfLoggedIn() }
         </AppContainer>
       </Fragment>
