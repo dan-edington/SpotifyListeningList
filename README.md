@@ -1,6 +1,6 @@
-# Spotify To-Listen-To
+# Spotify Listening List
 
-React app which consumes the Spotify API to search for albums and add them to a todo list. Users and saved albums are persisted to a MongoDB instance at mlab.com.
+React app which consumes the Spotify API to search for albums and add them to a todo/to-listen-to list. Users and saved albums are persisted to a MongoDB instance at mlab.com.
 
 Built using create-react-app so the usual commands apply:
 
